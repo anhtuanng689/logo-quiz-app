@@ -69,6 +69,7 @@ class _GameDoneSettingState extends State<GameDoneSetting> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 IconButton(
+                    enableFeedback: logoData.isSound,
                     padding: EdgeInsets.zero,
                     icon: SvgPicture.asset(
                       'assets/icons/back.svg',
@@ -81,6 +82,7 @@ class _GameDoneSettingState extends State<GameDoneSetting> {
                   child: Row(
                     children: [
                       IconButton(
+                          enableFeedback: logoData.isSound,
                           icon: SvgPicture.asset(
                             'assets/icons/money.svg',
                             width: SizeConfig.blockSizeVertical * 4,
@@ -94,6 +96,7 @@ class _GameDoneSettingState extends State<GameDoneSetting> {
                         ),
                       ),
                       IconButton(
+                          enableFeedback: logoData.isSound,
                           icon: SvgPicture.asset(
                             'assets/icons/addMoney.svg',
                             width: SizeConfig.blockSizeVertical * 4,

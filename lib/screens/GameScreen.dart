@@ -231,6 +231,10 @@ class _GameScreenState extends State<GameScreen> {
         setState(() {
           if (equal(listAnswer, listInput)) {
             isWin = true;
+            if (Provider.of<LogoProvider>(context, listen: false).soundCheck ==
+                1) {
+              Audio().playCorrect();
+            }
 
             Provider.of<LogoProvider>(context, listen: false).getRewards();
 
@@ -280,6 +284,9 @@ class _GameScreenState extends State<GameScreen> {
         listInput[i] = tempListAnswer[i];
       }
       isWin = true;
+      if (Provider.of<LogoProvider>(context, listen: false).soundCheck == 1) {
+        Audio().playCorrect();
+      }
       Provider.of<LogoProvider>(context, listen: false).minusShowAnswer();
       Provider.of<LogoProvider>(context, listen: false).getRewards();
       Provider.of<LogoProvider>(context, listen: false)
@@ -294,12 +301,22 @@ class _GameScreenState extends State<GameScreen> {
     bool eq = equal(listAnswer, listInput);
     bool contain = listInput.contains('_');
     if (!eq && !contain) {
-      if (logoData.soundCheck == 1) Audio.playWrong();
-      return QuestionCell(
-        colorHexBackground: 0xFFf44336,
-        colorHexText: 0xFF191919,
-        character: listInput[i],
-      );
+      if (hintedListAnswer[i]) {
+        return IgnorePointer(
+          ignoring: true,
+          child: QuestionCell(
+            colorHexBackground: 0xFF4caf50,
+            colorHexText: 0xFFffffff,
+            character: listInput[i],
+          ),
+        );
+      } else {
+        return QuestionCell(
+          colorHexBackground: 0xFFf44336,
+          colorHexText: 0xFF191919,
+          character: listInput[i],
+        );
+      }
     } else if (eq) {
       return QuestionCell(
         colorHexBackground: 0xFF4caf50,
@@ -329,7 +346,7 @@ class _GameScreenState extends State<GameScreen> {
   Future<void> waitTimeForResult() {
     print('timing');
     return Future.delayed(
-      Duration(seconds: 3),
+      Duration(seconds: 4),
       () => Navigator.pushReplacement(
           context,
           MaterialPageRoute(
@@ -374,6 +391,7 @@ class _GameScreenState extends State<GameScreen> {
                   Row(
                     children: [
                       IconButton(
+                          enableFeedback: logoData.isSound,
                           padding: EdgeInsets.zero,
                           icon: SvgPicture.asset(
                             'assets/icons/back.svg',
@@ -411,6 +429,7 @@ class _GameScreenState extends State<GameScreen> {
                     child: Row(
                       children: [
                         IconButton(
+                            enableFeedback: logoData.isSound,
                             icon: SvgPicture.asset(
                               'assets/icons/money.svg',
                               width: SizeConfig.blockSizeVertical * 4,
@@ -435,6 +454,7 @@ class _GameScreenState extends State<GameScreen> {
                                 ),
                               ),
                         IconButton(
+                            enableFeedback: logoData.isSound,
                             icon: SvgPicture.asset(
                               'assets/icons/addMoney.svg',
                               width: SizeConfig.blockSizeVertical * 4,
@@ -533,7 +553,7 @@ class _GameScreenState extends State<GameScreen> {
                                             Radius.circular(30)),
                                         child: Image.asset(
                                           "assets/drawable/${logo.img}.webp",
-                                          scale: 0.55,
+                                          scale: 0.75,
                                         ),
                                       ),
                                     ),
@@ -679,7 +699,6 @@ class _GameScreenState extends State<GameScreen> {
                                               if (isHintMode) {
                                                 setState(() {
                                                   print("Oke $i");
-                                                  logoData.minusRandomLetter();
                                                   listInput[i] =
                                                       tempListAnswer[i];
                                                   listAnswer[i] =
@@ -691,6 +710,13 @@ class _GameScreenState extends State<GameScreen> {
                                                   if (equal(
                                                       listAnswer, listInput)) {
                                                     isWin = true;
+                                                    if (Provider.of<LogoProvider>(
+                                                                context,
+                                                                listen: false)
+                                                            .soundCheck ==
+                                                        1) {
+                                                      Audio().playCorrect();
+                                                    }
                                                     logoData.getRewards();
 
                                                     logoData
@@ -845,7 +871,7 @@ class _GameScreenState extends State<GameScreen> {
                                                   isWin = true;
                                                   if (logoData.soundCheck ==
                                                       1) {
-                                                    Audio.playCorrect();
+                                                    Audio().playCorrect();
                                                   }
                                                   logoData.getRewards();
                                                   print(logo);

@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:logo_quiz/provider/LogoProvider.dart';
 import 'package:logo_quiz/utils/SizeConfig.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:logo_quiz/widgets/PurchaseCell.dart';
 import 'package:logo_quiz/widgets/RemoveAdsCell.dart';
+import 'package:provider/provider.dart';
 
 class PurchaseScreen extends StatefulWidget {
   const PurchaseScreen({Key key}) : super(key: key);
@@ -14,7 +16,7 @@ class PurchaseScreen extends StatefulWidget {
 class _PurchaseScreenState extends State<PurchaseScreen> {
   @override
   Widget build(BuildContext context) {
-    SizeConfig().init(context);
+    final logoData = Provider.of<LogoProvider>(context, listen: false);
     return SafeArea(
       child: Scaffold(
         appBar: PreferredSize(
@@ -28,6 +30,7 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 IconButton(
+                    enableFeedback: logoData.isSound,
                     padding: EdgeInsets.zero,
                     icon: SvgPicture.asset(
                       'assets/icons/back.svg',

@@ -1,8 +1,9 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:logo_quiz/provider/Notification.dart';
+import 'package:logo_quiz/screens/HomeScreen.dart';
 import 'package:provider/provider.dart';
-import 'screens/HomeScreen.dart';
 import 'package:logo_quiz/provider/LogoProvider.dart';
 import 'screens/SplashScreen.dart';
 
@@ -19,10 +20,21 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // return MaterialApp(
-    //   home: Scaffold(
-    //     body: HintDialog(),
-    //   ),
+    // return MultiProvider(
+    //     providers: [
+    //       ChangeNotifierProvider(
+    //         create: (context) => LogoProvider(),
+    //       ),
+    //     ],
+    //     child: MaterialApp(
+    //       title: 'Logo Quiz',
+    //       theme: ThemeData(
+    //         primarySwatch: Colors.blue,
+    //         fontFamily: 'Now',
+    //       ),
+    //       debugShowCheckedModeBanner: false,
+    //       home: HomeScreen(),
+    //     ));
     // );
     return FutureBuilder(
       future: Future.delayed(Duration(seconds: 3)),
@@ -38,6 +50,9 @@ class MyApp extends StatelessWidget {
             providers: [
               ChangeNotifierProvider(
                 create: (context) => LogoProvider(),
+              ),
+              ChangeNotifierProvider(
+                create: (context) => NotificationService(),
               ),
             ],
             child: MaterialApp(

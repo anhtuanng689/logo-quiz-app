@@ -5,19 +5,43 @@ import 'package:logo_quiz/db/DatabaseProvider.dart';
 import 'package:logo_quiz/models/Logo.dart';
 import 'package:logo_quiz/models/Score.dart';
 import 'package:logo_quiz/models/Categories.dart';
+import 'package:logo_quiz/models/Setting.dart';
 
 class LogoProvider with ChangeNotifier {
   Score gameScore = Score();
+  Setting gameSetting = Setting();
+
+  int id;
+  int isDone;
+  int soundCheck;
+  int notificationCheck;
+
   int totalCoin;
   int totalWinningLogo;
-  int soundCheck;
   int randomScore;
 
-  // List<Logo> logoList = [];
+  bool isSound;
   List<Categories> categoryList = [];
 
-  fetchGameSound() async {
-    soundCheck = await DatabaseProvider.dbProvider.fetchSound();
+  fetchGameSetting() async {
+    gameSetting = await DatabaseProvider.dbProvider.fetchSetting(1);
+    print("load db done");
+    notifyListeners();
+  }
+
+  fetchData() async {
+    print("load property");
+    print('s${gameSetting.sound} n${gameSetting.notification}');
+    id = gameSetting.id;
+    isDone = gameSetting.isDone;
+    soundCheck = gameSetting.sound;
+
+    if (soundCheck == 1) {
+      isSound = true;
+    } else {
+      isSound = false;
+    }
+    notificationCheck = gameSetting.notification;
   }
 
   // fetchLogoPerTheme(int numberTheme) async {
@@ -104,6 +128,27 @@ class LogoProvider with ChangeNotifier {
     //update status in db
     await DatabaseProvider.dbProvider.updateLogoStatus(logo, logoId);
     await DatabaseProvider.dbProvider.updateWinningLogo(category, categoryId);
+    notifyListeners();
+  }
+
+  getDoneChoice(int index) {
+    isDone = index;
+    print(isDone);
+    gameSetting.isDone = index;
+    notifyListeners();
+  }
+
+  getSoundChoice(int index) {
+    soundCheck = index;
+    print(soundCheck);
+    gameSetting.sound = index;
+    notifyListeners();
+  }
+
+  getNotificationChoice(int index) {
+    notificationCheck = index;
+    print(notificationCheck);
+    gameSetting.notification = index;
     notifyListeners();
   }
 

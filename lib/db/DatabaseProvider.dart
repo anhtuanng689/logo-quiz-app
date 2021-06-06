@@ -108,13 +108,23 @@ class DatabaseProvider {
     return list;
   }
 
-  Future<int> fetchSound() async {
+  Future<Setting> fetchSetting(int id) async {
     Database database = await this.database;
-
-    var query = await database.rawQuery('SELECT sound from score');
-    int count = Sqflite.firstIntValue(query);
-    return count;
+    var result =
+        await database.query('setting', where: 'id = ?', whereArgs: [id]);
+    // var result =
+    //     await database.rawQuery('SELECT * FROM setting WHERE id = $id');
+    print('result: $result');
+    return result.isNotEmpty ? Setting.fromMap(result.first) : null;
   }
+
+  // Future<Setting> fetchSetting() async {
+  //   Database database = await this.database;
+  //
+  //   var result = await database.rawQuery('SELECT * from setting where id = 1');
+  //   print(result.first);
+  //   return result.isNotEmpty ? Setting.fromMap(result.first) : null;
+  // }
 
   Future<int> fetchCoin() async {
     Database database = await this.database;
@@ -127,7 +137,7 @@ class DatabaseProvider {
   Future<int> updateScore(Score score) async {
     Database database = await this.database;
 
-    var result = database
+    var result = await database
         .update("score", score.toMap(), where: 'id = ?', whereArgs: [1]);
 
     return result;
@@ -136,7 +146,7 @@ class DatabaseProvider {
   Future<int> updateSetting(Setting setting) async {
     Database database = await this.database;
 
-    var result = database
+    var result = await database
         .update("setting", setting.toMap(), where: 'id = ?', whereArgs: [1]);
 
     return result;
@@ -144,7 +154,7 @@ class DatabaseProvider {
 
   Future<int> updateLogoStatus(Logo logo, int id) async {
     Database database = await this.database;
-    var result = database
+    var result = await database
         .update("logotable", logo.toMap(), where: 'id = ?', whereArgs: [id]);
 
     return result;
@@ -152,7 +162,7 @@ class DatabaseProvider {
 
   Future<int> updateWinningLogo(Categories category, int id) async {
     Database database = await this.database;
-    var result = database
+    var result = await database
         .update("category", category.toMap(), where: 'id = ?', whereArgs: [id]);
 
     return result;

@@ -52,7 +52,7 @@ class PurchaseCell extends StatelessWidget {
                     child: Text(
                       percentSave,
                       style: TextStyle(
-                        fontSize: SizeConfig.blockSizeVertical * 2,
+                        fontSize: SizeConfig.blockSizeVertical * 1.8,
                         color: Colors.white,
                       ),
                     ),
@@ -86,7 +86,7 @@ class PurchaseCell extends StatelessWidget {
                         child: Text(
                           percentSave,
                           style: TextStyle(
-                            fontSize: SizeConfig.blockSizeVertical * 2,
+                            fontSize: SizeConfig.blockSizeVertical * 1.8,
                             color: Colors.white,
                           ),
                         ),
@@ -102,17 +102,17 @@ class PurchaseCell extends StatelessWidget {
             ),
           ),
           SizedBox(
-            width: SizeConfig.blockSizeHorizontal,
+            width: SizeConfig.safeBlockHorizontal,
           ),
           Container(
             // color: Colors.lightBlueAccent,
-            width: SizeConfig.screenWidth * 0.135,
+            width: SizeConfig.screenWidth * 0.12,
             height: SizeConfig.screenHeight * 0.055,
             child: Center(
               child: Text(
                 coin.toString(),
                 style: TextStyle(
-                  fontSize: SizeConfig.blockSizeVertical * 2.3,
+                  fontSize: SizeConfig.blockSizeVertical * 1.8,
                   color: Colors.white,
                 ),
               ),
@@ -123,24 +123,26 @@ class PurchaseCell extends StatelessWidget {
             width: SizeConfig.screenWidth * 0.28,
             height: SizeConfig.screenHeight * 0.055,
             child: purchaseMoney == "Watch Video"
-                ? Wrap(alignment: WrapAlignment.center, children: [
-                    Text(
-                      purchaseMoney,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Color(0xFF00C2FF),
-                        fontWeight: FontWeight.bold,
-                        fontSize: SizeConfig.blockSizeVertical * 2.5,
-                      ),
-                    )
-                  ])
+                ? Center(
+                    child: Wrap(alignment: WrapAlignment.center, children: [
+                      Text(
+                        purchaseMoney,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Color(0xFF00C2FF),
+                          fontWeight: FontWeight.bold,
+                          fontSize: SizeConfig.blockSizeVertical * 1.9,
+                        ),
+                      )
+                    ]),
+                  )
                 : Center(
                     child: Text(
                       purchaseMoney,
                       style: TextStyle(
                         color: Color(0xFF00C2FF),
                         fontWeight: FontWeight.bold,
-                        fontSize: SizeConfig.blockSizeVertical * 3,
+                        fontSize: SizeConfig.blockSizeVertical * 1.9,
                       ),
                     ),
                   ),

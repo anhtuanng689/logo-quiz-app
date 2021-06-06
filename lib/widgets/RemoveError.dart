@@ -1,10 +1,14 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
+import 'package:logo_quiz/provider/LogoProvider.dart';
 import 'package:logo_quiz/utils/SizeConfig.dart';
+import 'package:provider/provider.dart';
 
 class RemoveError extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final logoData = Provider.of<LogoProvider>(context, listen: false);
+
     return FadeIn(
       duration: Duration(seconds: 1),
       child: Material(
@@ -57,6 +61,7 @@ class RemoveError extends StatelessWidget {
                     ),
                   ),
                   style: ElevatedButton.styleFrom(
+                      enableFeedback: logoData.isSound,
                       primary: Colors.blueGrey,
                       elevation: SizeConfig.blockSizeVertical,
                       shape: RoundedRectangleBorder(

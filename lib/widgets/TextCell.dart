@@ -11,7 +11,7 @@ class TextCell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(3),
+      padding: EdgeInsets.all(5),
       child: SizedBox(
         width: SizeConfig.blockSizeHorizontal * 13,
         height: SizeConfig.blockSizeVertical * 8,

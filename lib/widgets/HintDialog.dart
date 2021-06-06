@@ -1,7 +1,9 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:logo_quiz/provider/LogoProvider.dart';
 import 'package:logo_quiz/utils/SizeConfig.dart';
+import 'package:provider/provider.dart';
 
 class HintDialog extends StatefulWidget {
   @override
@@ -12,6 +14,8 @@ class _HintDialogState extends State<HintDialog> {
   int choice;
   @override
   Widget build(BuildContext context) {
+    final logoData = Provider.of<LogoProvider>(context, listen: false);
+
     return FadeIn(
       duration: Duration(seconds: 1),
       child: Material(
@@ -73,6 +77,7 @@ class _HintDialogState extends State<HintDialog> {
                     ),
                   ),
                   style: ElevatedButton.styleFrom(
+                      enableFeedback: logoData.isSound,
                       primary: Color(0xFF1A1742),
                       elevation: SizeConfig.blockSizeVertical * 2,
                       shape: RoundedRectangleBorder(
@@ -115,6 +120,7 @@ class _HintDialogState extends State<HintDialog> {
                     ),
                   ),
                   style: ElevatedButton.styleFrom(
+                      enableFeedback: logoData.isSound,
                       primary: Color(0xFF1A1742),
                       elevation: SizeConfig.blockSizeVertical * 2,
                       shape: RoundedRectangleBorder(
@@ -157,6 +163,7 @@ class _HintDialogState extends State<HintDialog> {
                     ),
                   ),
                   style: ElevatedButton.styleFrom(
+                      enableFeedback: logoData.isSound,
                       primary: Color(0xFF1A1742),
                       elevation: SizeConfig.blockSizeVertical * 2,
                       shape: RoundedRectangleBorder(
@@ -183,6 +190,7 @@ class _HintDialogState extends State<HintDialog> {
                     ),
                   ),
                   style: ElevatedButton.styleFrom(
+                      enableFeedback: logoData.isSound,
                       primary: Colors.blueGrey,
                       elevation: SizeConfig.blockSizeVertical,
                       shape: RoundedRectangleBorder(

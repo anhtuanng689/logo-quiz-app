@@ -34,6 +34,7 @@
     animate_do: ^2.0.0
     audioplayers: ^0.16.2
     animated_text_kit: ^4.2.1
+    flutter_local_notifications: ^4.0.1+2
 
   dev_dependencies:
     flutter_test:

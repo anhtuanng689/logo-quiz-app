@@ -8,7 +8,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:logo_quiz/widgets/LogoCell.dart';
 import 'package:provider/provider.dart';
 
-import 'HomeScreen.dart';
+import 'GameHome.dart';
 import 'PurchaseScreen.dart';
 
 class LogoGridScreen extends StatefulWidget {
@@ -36,7 +36,7 @@ class _LogoGridScreenState extends State<LogoGridScreen> {
 
   void moveToLastScreen() {
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => HomeScreen()));
+        context, MaterialPageRoute(builder: (context) => GameHome()));
   }
 
   @override
@@ -61,6 +61,7 @@ class _LogoGridScreenState extends State<LogoGridScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   IconButton(
+                      enableFeedback: logoData.isSound,
                       padding: EdgeInsets.zero,
                       icon: SvgPicture.asset(
                         'assets/icons/back.svg',
@@ -70,12 +71,13 @@ class _LogoGridScreenState extends State<LogoGridScreen> {
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => HomeScreen()));
+                                builder: (context) => GameHome()));
                       }),
                   Container(
                     child: Row(
                       children: [
                         IconButton(
+                            enableFeedback: logoData.isSound,
                             icon: SvgPicture.asset(
                               'assets/icons/money.svg',
                               width: SizeConfig.blockSizeVertical * 4,
@@ -89,6 +91,7 @@ class _LogoGridScreenState extends State<LogoGridScreen> {
                           ),
                         ),
                         IconButton(
+                            enableFeedback: logoData.isSound,
                             icon: SvgPicture.asset(
                               'assets/icons/addMoney.svg',
                               width: SizeConfig.blockSizeVertical * 4,
@@ -159,6 +162,7 @@ class _LogoGridScreenState extends State<LogoGridScreen> {
                                     BorderRadius.all(Radius.circular(15.0)),
                               ),
                               child: IconButton(
+                                  enableFeedback: logoData.isSound,
                                   icon: SvgPicture.asset(
                                     'assets/images/onFilter.svg',
                                     color: Color(0xFF154e81),
@@ -180,6 +184,7 @@ class _LogoGridScreenState extends State<LogoGridScreen> {
                                     BorderRadius.all(Radius.circular(15.0)),
                               ),
                               child: IconButton(
+                                  enableFeedback: logoData.isSound,
                                   icon: SvgPicture.asset(
                                     'assets/images/onFilter.svg',
                                     color: Color(0xFF00c2FF),

@@ -42,9 +42,9 @@ class LogoTheme extends StatelessWidget {
     final logoData = Provider.of<LogoProvider>(context, listen: false);
     return Container(
         padding: EdgeInsets.symmetric(
-          vertical: SizeConfig.blockSizeVertical * 3,
+          vertical: SizeConfig.blockSizeVertical * 2,
         ),
-        height: SizeConfig.blockSizeVertical * 30,
+        height: SizeConfig.blockSizeVertical * 27,
         width: SizeConfig.screenWidth * 0.9,
         decoration: BoxDecoration(
           color: Color(0xFF22214B),
@@ -67,14 +67,16 @@ class LogoTheme extends StatelessWidget {
                 ),
                 Column(
                   children: [
-                    Text(
-                      themeName,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        // color: Color(themeColor),
-                        color: _color,
-                        fontWeight: FontWeight.w600,
-                        fontSize: SizeConfig.blockSizeVertical * 2.6,
+                    FittedBox(
+                      child: Text(
+                        themeName,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          // color: Color(themeColor),
+                          color: _color,
+                          fontWeight: FontWeight.w600,
+                          fontSize: SizeConfig.blockSizeVertical * 2.6,
+                        ),
                       ),
                     ),
                     SizedBox(
@@ -110,7 +112,7 @@ class LogoTheme extends StatelessWidget {
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.w400,
-                                  fontSize: SizeConfig.blockSizeVertical * 2.9,
+                                  fontSize: SizeConfig.blockSizeVertical * 2.25,
                                 ),
                               ),
                             ],
@@ -127,7 +129,55 @@ class LogoTheme extends StatelessWidget {
                           percent: list[themeLevel - 1].count /
                               list[themeLevel - 1].all,
                           backgroundColor: Color(0xFF3B3A72),
-                          progressColor: Color(0xFFEE0056),
+                          progressColor: Color(0xFFB6426B),
+                        ),
+                        SizedBox(
+                          height: SizeConfig.blockSizeVertical * 2,
+                        ),
+                        AbsorbPointer(
+                          absorbing: (logoData.totalWinningLogo <
+                                  list[themeLevel - 1].expected)
+                              ? true
+                              : false,
+                          child: Container(
+                            width: SizeConfig.blockSizeHorizontal * 60,
+                            height: SizeConfig.blockSizeVertical * 7,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                if (logoData.soundCheck == 1) {
+                                  Audio().playNormalClick();
+                                }
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => LogoGridScreen(
+                                              themeId: themeId,
+                                            )));
+                              },
+                              child: FittedBox(
+                                child: Text(
+                                  (logoData.totalWinningLogo <
+                                          list[themeLevel - 1].expected)
+                                      ? 'Needs ${list[themeLevel - 1].expected - logoData.totalWinningLogo} logos to unlock'
+                                      : 'Play',
+                                  style: TextStyle(
+                                    color: Color(0xFFCBD5E1),
+                                    fontWeight: FontWeight.w600,
+                                    fontSize:
+                                        SizeConfig.blockSizeVertical * 2.5,
+                                  ),
+                                ),
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                  enableFeedback: logoData.isSound,
+                                  primary: Color(0xFF1A1742),
+                                  elevation: SizeConfig.blockSizeVertical * 2,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.horizontal(
+                                          left: Radius.circular(60),
+                                          right: Radius.circular(60)))),
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -136,39 +186,6 @@ class LogoTheme extends StatelessWidget {
                   return Center(child: CircularProgressIndicator());
                 }
               },
-            ),
-            ElevatedButton(
-              onPressed: () {
-                if (logoData.soundCheck == 1) {
-                  Audio.playNormalClick();
-                }
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => LogoGridScreen(
-                              themeId: themeId,
-                            )));
-              },
-              child: Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: SizeConfig.blockSizeHorizontal * 12,
-                    vertical: SizeConfig.blockSizeVertical * 1.5),
-                child: Text(
-                  'Start',
-                  style: TextStyle(
-                    color: Color(0xFFCBD5E1),
-                    fontWeight: FontWeight.w600,
-                    fontSize: SizeConfig.blockSizeVertical * 3,
-                  ),
-                ),
-              ),
-              style: ElevatedButton.styleFrom(
-                  primary: Color(0xFF1A1742),
-                  elevation: SizeConfig.blockSizeVertical * 2,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.horizontal(
-                          left: Radius.circular(60),
-                          right: Radius.circular(60)))),
             ),
           ],
         ));

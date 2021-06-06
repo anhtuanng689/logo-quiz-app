@@ -49,7 +49,7 @@ class _ResultScreenState extends State<ResultScreen> {
     super.initState();
     fetchLogoData(widget.themeId);
     if (Provider.of<LogoProvider>(context, listen: false).soundCheck == 1) {
-      Audio.playWin();
+      Audio().playWin();
     }
   }
 
@@ -70,6 +70,7 @@ class _ResultScreenState extends State<ResultScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 IconButton(
+                    enableFeedback: logoData.isSound,
                     padding: EdgeInsets.zero,
                     icon: SvgPicture.asset(
                       'assets/icons/back.svg',
@@ -87,6 +88,7 @@ class _ResultScreenState extends State<ResultScreen> {
                   child: Row(
                     children: [
                       IconButton(
+                          enableFeedback: logoData.isSound,
                           icon: SvgPicture.asset(
                             'assets/icons/money.svg',
                             width: SizeConfig.blockSizeVertical * 4,
@@ -100,6 +102,7 @@ class _ResultScreenState extends State<ResultScreen> {
                         ),
                       ),
                       IconButton(
+                          enableFeedback: logoData.isSound,
                           icon: SvgPicture.asset(
                             'assets/icons/addMoney.svg',
                             width: SizeConfig.blockSizeVertical * 4,

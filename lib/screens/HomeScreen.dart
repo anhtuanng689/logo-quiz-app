@@ -1,15 +1,18 @@
-import 'package:animate_do/animate_do.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:logo_quiz/db/DatabaseProvider.dart';
-import 'package:logo_quiz/models/Logo.dart';
 import 'package:logo_quiz/provider/LogoProvider.dart';
+import 'package:logo_quiz/utils/Audio.dart';
 import 'package:logo_quiz/utils/SizeConfig.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:logo_quiz/widgets/LogoTheme.dart';
 import 'package:logo_quiz/screens/SettingScreen.dart';
 import 'package:logo_quiz/screens/PurchaseScreen.dart';
 import 'package:provider/provider.dart';
+import 'package:logo_quiz/screens/GameHome.dart';
+import 'package:logo_quiz/screens/HowToPlayScreen.dart';
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key key}) : super(key: key);
@@ -18,28 +21,30 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  void fetchData() async {
-    print('checking');
-    await Provider.of<LogoProvider>(context, listen: false).fetchAllCategory();
-    setState(() {});
-    print('done');
-  }
+  bool loading;
 
-  checkSound() async {
-    await Provider.of<LogoProvider>(context, listen: false).fetchGameSound();
+  checkSetting() async {
+    loading = true;
+    setState(() {});
+    print('fetching');
+    await Provider.of<LogoProvider>(context, listen: false).fetchGameSetting();
+    await Provider.of<LogoProvider>(context, listen: false).fetchData();
+    print('done fetching');
+    loading = false;
+    setState(() {});
   }
 
   @override
   void initState() {
+    checkSetting();
+    tz.initializeTimeZones();
+    tz.setLocalLocation(tz.getLocation('America/Detroit'));
     super.initState();
-    fetchData();
-    checkSound();
   }
 
   @override
   Widget build(BuildContext context) {
     final logoData = Provider.of<LogoProvider>(context, listen: false);
-    print('${logoData.totalCoin} at first');
     SizeConfig().init(context);
     return SafeArea(
       child: Scaffold(
@@ -54,6 +59,8 @@ class _HomeScreenState extends State<HomeScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 IconButton(
+                    // TODO: loi
+                    enableFeedback: loading ? true : logoData.isSound,
                     padding: EdgeInsets.zero,
                     icon: SvgPicture.asset(
                       'assets/icons/setting.svg',
@@ -68,12 +75,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 Container(
                   child: Row(
                     children: [
-                      IconButton(
-                          icon: SvgPicture.asset(
-                            'assets/icons/money.svg',
-                            width: SizeConfig.blockSizeVertical * 4,
-                          ),
-                          onPressed: () {}),
+                      AbsorbPointer(
+                        absorbing: true,
+                        child: IconButton(
+                            icon: SvgPicture.asset(
+                              'assets/icons/money.svg',
+                              width: SizeConfig.blockSizeVertical * 4,
+                            ),
+                            onPressed: () {}),
+                      ),
                       FutureBuilder<int>(
                           future: DatabaseProvider.dbProvider.fetchCoin(),
                           builder: (BuildContext context,
@@ -92,6 +102,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             }
                           }),
                       IconButton(
+                          // TODO: loi
+                          enableFeedback: loading ? true : logoData.isSound,
                           icon: SvgPicture.asset(
                             'assets/icons/addMoney.svg',
                             width: SizeConfig.blockSizeVertical * 4,
@@ -121,80 +133,129 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
-            Column(
-              children: [
-                Container(
-                  height: SizeConfig.blockSizeVertical * 25,
-                  width: SizeConfig.screenWidth,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      SvgPicture.asset(
-                        "assets/images/logoQuiz.svg",
-                        width: SizeConfig.blockSizeHorizontal * 75,
-                        // scale: 0.6,
-                      ),
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                            vertical: SizeConfig.blockSizeVertical * 1.5,
-                            horizontal: SizeConfig.blockSizeHorizontal * 8),
-                        decoration: BoxDecoration(
-                          color: Color(0xFF14143a),
-                          borderRadius: BorderRadius.all(Radius.circular(60.0)),
+            Padding(
+              padding: EdgeInsets.symmetric(
+                  horizontal: SizeConfig.blockSizeHorizontal * 5,
+                  vertical: SizeConfig.blockSizeVertical),
+              child: Column(
+                children: [
+                  Spacer(),
+                  Container(
+                    height: SizeConfig.blockSizeVertical * 15,
+                    width: SizeConfig.screenWidth,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        SvgPicture.asset(
+                          "assets/images/logoQuiz.svg",
+                          width: SizeConfig.blockSizeHorizontal * 85,
                         ),
-                        child: logoData.totalWinningLogo == null
-                            ? CircularProgressIndicator()
-                            : Text(
-                                '${logoData.totalWinningLogo}/2090',
-                                // '0/2090',
-                                style: TextStyle(
-                                    color: Color(0xFFCBD5E1),
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: SizeConfig.blockSizeVertical * 3),
-                              ),
+                      ],
+                    ),
+                  ),
+                  Spacer(),
+                  Container(
+                    width: SizeConfig.blockSizeHorizontal * 60,
+                    height: SizeConfig.blockSizeVertical * 8,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        if (logoData.soundCheck == 1) {
+                          Audio().playNormalClick();
+                        }
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => GameHome()));
+                      },
+                      child: Text(
+                        'Start',
+                        style: TextStyle(
+                          color: Color(0xFFCBD5E1),
+                          fontWeight: FontWeight.w600,
+                          fontSize: SizeConfig.blockSizeVertical * 3,
+                        ),
                       ),
-                    ],
+                      style: ElevatedButton.styleFrom(
+                          enableFeedback: logoData.isSound,
+                          primary: Color(0xFF1A1742),
+                          elevation: SizeConfig.blockSizeVertical * 2,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.horizontal(
+                                  left: Radius.circular(60),
+                                  right: Radius.circular(60)))),
+                    ),
                   ),
-                ),
-                Expanded(
-                  child: FutureBuilder<List<Logo>>(
-                    future: DatabaseProvider.dbProvider.getCategories(),
-                    builder: (BuildContext context,
-                        AsyncSnapshot<List<Logo>> snapshot) {
-                      if (snapshot.hasData) {
-                        return ListView.builder(
-                          itemCount: snapshot.data.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            Logo logo = snapshot.data[index];
-                            return Column(
-                              children: [
-                                FadeInLeft(
-                                  duration: Duration(seconds: 1),
-                                  child: LogoTheme(
-                                    themeName: logo.categories,
-                                    themeColor: 0xFF00C2FF,
-                                    themeIconURL: logo.categories,
-                                    themeLevel: logo.catId,
-                                    progressPercent: 0,
-                                    themeId: logo.catId,
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: SizeConfig.blockSizeVertical * 3,
-                                )
-                              ],
-                            );
-                          },
-                        );
-                      } else {
-                        return Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      }
-                    },
+                  SizedBox(
+                    height: SizeConfig.blockSizeVertical * 5,
                   ),
-                ),
-              ],
+                  Container(
+                    width: SizeConfig.blockSizeHorizontal * 60,
+                    height: SizeConfig.blockSizeVertical * 8,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        if (logoData.soundCheck == 1) {
+                          Audio().playNormalClick();
+                        }
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => HowToPlayScreen()));
+                      },
+                      child: Text(
+                        'How to play',
+                        style: TextStyle(
+                          color: Color(0xFFCBD5E1),
+                          fontWeight: FontWeight.w600,
+                          fontSize: SizeConfig.blockSizeVertical * 3,
+                        ),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                          enableFeedback: logoData.isSound,
+                          primary: Color(0xFF1A1742),
+                          elevation: SizeConfig.blockSizeVertical * 2,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.horizontal(
+                                  left: Radius.circular(60),
+                                  right: Radius.circular(60)))),
+                    ),
+                  ),
+                  SizedBox(
+                    height: SizeConfig.blockSizeVertical * 5,
+                  ),
+                  Container(
+                    width: SizeConfig.blockSizeHorizontal * 60,
+                    height: SizeConfig.blockSizeVertical * 8,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Future.delayed(const Duration(milliseconds: 1000), () {
+                          SystemChannels.platform
+                              .invokeMethod('SystemNavigator.pop');
+                        });
+                      },
+                      child: Text(
+                        'Quit',
+                        style: TextStyle(
+                          color: Color(0xFFCBD5E1),
+                          fontWeight: FontWeight.w600,
+                          fontSize: SizeConfig.blockSizeVertical * 3,
+                        ),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                          enableFeedback: logoData.isSound,
+                          primary: Color(0xFF1A1742),
+                          elevation: SizeConfig.blockSizeVertical * 2,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.horizontal(
+                                  left: Radius.circular(60),
+                                  right: Radius.circular(60)))),
+                    ),
+                  ),
+                  SizedBox(
+                    height: SizeConfig.blockSizeVertical * 5,
+                  ),
+                  Spacer(),
+                ],
+              ),
             ),
           ],
         ),

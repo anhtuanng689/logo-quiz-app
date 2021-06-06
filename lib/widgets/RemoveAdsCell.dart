@@ -39,7 +39,7 @@ class RemoveAdsCell extends StatelessWidget {
               child: Text(
                 'Remove ads',
                 style: TextStyle(
-                  fontSize: SizeConfig.blockSizeVertical * 2.3,
+                  fontSize: SizeConfig.blockSizeVertical * 1.8,
                   color: Colors.white,
                 ),
               ),
@@ -57,7 +57,7 @@ class RemoveAdsCell extends StatelessWidget {
                       style: TextStyle(
                         color: Color(0xFF00C2FF),
                         fontWeight: FontWeight.bold,
-                        fontSize: SizeConfig.blockSizeVertical * 2.5,
+                        fontSize: SizeConfig.blockSizeVertical * 1.9,
                       ),
                     )
                   ])
@@ -67,7 +67,7 @@ class RemoveAdsCell extends StatelessWidget {
                       style: TextStyle(
                         color: Color(0xFF00C2FF),
                         fontWeight: FontWeight.bold,
-                        fontSize: SizeConfig.blockSizeVertical * 3,
+                        fontSize: SizeConfig.blockSizeVertical * 1.9,
                       ),
                     ),
                   ),
