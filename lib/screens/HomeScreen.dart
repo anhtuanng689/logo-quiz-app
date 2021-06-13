@@ -101,19 +101,19 @@ class _HomeScreenState extends State<HomeScreen> {
                               return CircularProgressIndicator();
                             }
                           }),
-                      IconButton(
-                          // TODO: loi
-                          enableFeedback: loading ? true : logoData.isSound,
-                          icon: SvgPicture.asset(
-                            'assets/icons/addMoney.svg',
-                            width: SizeConfig.blockSizeVertical * 4,
-                          ),
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => PurchaseScreen()));
-                          }),
+                      // IconButton(
+                      //     // TODO: loi
+                      //     enableFeedback: loading ? true : logoData.isSound,
+                      //     icon: SvgPicture.asset(
+                      //       'assets/icons/addMoney.svg',
+                      //       width: SizeConfig.blockSizeVertical * 4,
+                      //     ),
+                      //     onPressed: () {
+                      //       Navigator.push(
+                      //           context,
+                      //           MaterialPageRoute(
+                      //               builder: (context) => PurchaseScreen()));
+                      //     }),
                     ],
                   ),
                 ),
@@ -148,7 +148,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: [
                         SvgPicture.asset(
                           "assets/images/logoQuiz.svg",
-                          width: SizeConfig.blockSizeHorizontal * 85,
+                          width: SizeConfig.blockSizeHorizontal * 80,
                         ),
                       ],
                     ),
@@ -193,9 +193,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     height: SizeConfig.blockSizeVertical * 8,
                     child: ElevatedButton(
                       onPressed: () {
-                        if (logoData.soundCheck == 1) {
-                          Audio().playNormalClick();
-                        }
                         Navigator.push(
                             context,
                             MaterialPageRoute(

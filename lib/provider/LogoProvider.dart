@@ -22,6 +22,13 @@ class LogoProvider with ChangeNotifier {
 
   bool isSound;
   List<Categories> categoryList = [];
+  List<String> listRandom = [];
+
+  refreshListRandom() {
+    print("remove");
+    listRandom.clear();
+    // notifyListeners();
+  }
 
   fetchGameSetting() async {
     gameSetting = await DatabaseProvider.dbProvider.fetchSetting(1);
@@ -75,6 +82,13 @@ class LogoProvider with ChangeNotifier {
 
   minusRandomLetter() async {
     totalCoin -= 50;
+    gameScore.score = totalCoin;
+    await DatabaseProvider.dbProvider.updateScore(gameScore);
+    notifyListeners();
+  }
+
+  minusShowLetter() async {
+    totalCoin -= 100;
     gameScore.score = totalCoin;
     await DatabaseProvider.dbProvider.updateScore(gameScore);
     notifyListeners();
@@ -151,20 +165,4 @@ class LogoProvider with ChangeNotifier {
     gameSetting.notification = index;
     notifyListeners();
   }
-
-  // updateWinningStatus(Logo logo, Categories category, int id) async {
-  //   //update status
-  //   logo.isWin = 1;
-  //   //all in app
-  //   totalWinningLogo++;
-  //   //each in app
-  //   categoryList[id - 1].count++;
-  //   // print('${categoryList[id - 1].count}.');
-  //   category.count = categoryList[id - 1].count;
-  //   // print('${category.count}..');
-  //   //update status in db
-  //   await DatabaseProvider.dbProvider.updateLogoStatus(logo, id);
-  //   await DatabaseProvider.dbProvider.updateWinningLogo(category, id);
-  //   notifyListeners();
-  // }
 }

@@ -36,7 +36,7 @@ class CoinError extends StatelessWidget {
                 ),
                 Spacer(),
                 Text(
-                  'You don' 't have enough coins!!!',
+                  'You don\'t have enough coins!!!',
                   style: TextStyle(
                       fontSize: SizeConfig.blockSizeVertical * 2,
                       color: Colors.white,
@@ -47,31 +47,31 @@ class CoinError extends StatelessWidget {
                   padding: EdgeInsets.symmetric(horizontal: 10),
                   child: Row(
                     children: [
-                      ElevatedButton(
-                        onPressed: () {
-                          // Navigator.pop(context);
-                        },
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                              vertical: SizeConfig.blockSizeVertical),
-                          child: Text(
-                            'More coins',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w600,
-                              fontSize: SizeConfig.blockSizeVertical * 2,
-                            ),
-                          ),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                            enableFeedback: logoData.isSound,
-                            primary: Colors.greenAccent,
-                            elevation: SizeConfig.blockSizeVertical,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.horizontal(
-                                    left: Radius.circular(30),
-                                    right: Radius.circular(30)))),
-                      ),
+                      // ElevatedButton(
+                      //   onPressed: () {
+                      //     // Navigator.pop(context);
+                      //   },
+                      //   child: Padding(
+                      //     padding: EdgeInsets.symmetric(
+                      //         vertical: SizeConfig.blockSizeVertical),
+                      //     child: Text(
+                      //       'More coins',
+                      //       style: TextStyle(
+                      //         color: Colors.white,
+                      //         fontWeight: FontWeight.w600,
+                      //         fontSize: SizeConfig.blockSizeVertical * 2,
+                      //       ),
+                      //     ),
+                      //   ),
+                      //   style: ElevatedButton.styleFrom(
+                      //       enableFeedback: logoData.isSound,
+                      //       primary: Colors.greenAccent,
+                      //       elevation: SizeConfig.blockSizeVertical,
+                      //       shape: RoundedRectangleBorder(
+                      //           borderRadius: BorderRadius.horizontal(
+                      //               left: Radius.circular(30),
+                      //               right: Radius.circular(30)))),
+                      // ),
                       Spacer(),
                       ElevatedButton(
                         onPressed: () {
@@ -98,6 +98,7 @@ class CoinError extends StatelessWidget {
                                     left: Radius.circular(30),
                                     right: Radius.circular(30)))),
                       ),
+                      Spacer(),
                     ],
                   ),
                 ),

@@ -90,18 +90,18 @@ class _LogoGridScreenState extends State<LogoGridScreen> {
                             fontSize: SizeConfig.blockSizeVertical * 3,
                           ),
                         ),
-                        IconButton(
-                            enableFeedback: logoData.isSound,
-                            icon: SvgPicture.asset(
-                              'assets/icons/addMoney.svg',
-                              width: SizeConfig.blockSizeVertical * 4,
-                            ),
-                            onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => PurchaseScreen()));
-                            }),
+                        // IconButton(
+                        //     enableFeedback: logoData.isSound,
+                        //     icon: SvgPicture.asset(
+                        //       'assets/icons/addMoney.svg',
+                        //       width: SizeConfig.blockSizeVertical * 4,
+                        //     ),
+                        //     onPressed: () {
+                        //       Navigator.push(
+                        //           context,
+                        //           MaterialPageRoute(
+                        //               builder: (context) => PurchaseScreen()));
+                        //     }),
                       ],
                     ),
                   ),

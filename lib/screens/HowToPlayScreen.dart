@@ -73,18 +73,18 @@ class _HowToPlayScreenState extends State<HowToPlayScreen> {
                               return CircularProgressIndicator();
                             }
                           }),
-                      IconButton(
-                          enableFeedback: logoData.isSound,
-                          icon: SvgPicture.asset(
-                            'assets/icons/addMoney.svg',
-                            width: SizeConfig.blockSizeVertical * 4,
-                          ),
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => PurchaseScreen()));
-                          }),
+                      // IconButton(
+                      //     enableFeedback: logoData.isSound,
+                      //     icon: SvgPicture.asset(
+                      //       'assets/icons/addMoney.svg',
+                      //       width: SizeConfig.blockSizeVertical * 4,
+                      //     ),
+                      //     onPressed: () {
+                      //       Navigator.push(
+                      //           context,
+                      //           MaterialPageRoute(
+                      //               builder: (context) => PurchaseScreen()));
+                      //     }),
                     ],
                   ),
                 ),
@@ -210,46 +210,6 @@ class _HowToPlayScreenState extends State<HowToPlayScreen> {
                           child: Row(
                             children: [
                               SvgPicture.asset(
-                                'assets/icons/idea.svg',
-                                width: SizeConfig.blockSizeVertical * 5,
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Expanded(
-                                child: RichText(
-                                  text: TextSpan(
-                                    children: <TextSpan>[
-                                      TextSpan(
-                                        text: 'Hint',
-                                        style: TextStyle(
-                                          fontSize:
-                                              SizeConfig.blockSizeVertical *
-                                                  2.6,
-                                        ),
-                                      ),
-                                      TextSpan(
-                                        text:
-                                            ' - Choose any letter to open in the answer box',
-                                        style: TextStyle(
-                                          fontSize:
-                                              SizeConfig.blockSizeVertical *
-                                                  2.2,
-                                          color: Colors.white60,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          height: SizeConfig.blockSizeVertical * 10,
-                          child: Row(
-                            children: [
-                              SvgPicture.asset(
                                 'assets/icons/question.svg',
                                 width: SizeConfig.blockSizeVertical * 5,
                               ),
@@ -271,6 +231,46 @@ class _HowToPlayScreenState extends State<HowToPlayScreen> {
                                       TextSpan(
                                         text:
                                             ' - Open random letter in the answer box',
+                                        style: TextStyle(
+                                          fontSize:
+                                              SizeConfig.blockSizeVertical *
+                                                  2.2,
+                                          color: Colors.white60,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          height: SizeConfig.blockSizeVertical * 10,
+                          child: Row(
+                            children: [
+                              SvgPicture.asset(
+                                'assets/icons/idea.svg',
+                                width: SizeConfig.blockSizeVertical * 5,
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Expanded(
+                                child: RichText(
+                                  text: TextSpan(
+                                    children: <TextSpan>[
+                                      TextSpan(
+                                        text: 'Show Letter',
+                                        style: TextStyle(
+                                          fontSize:
+                                              SizeConfig.blockSizeVertical *
+                                                  2.6,
+                                        ),
+                                      ),
+                                      TextSpan(
+                                        text:
+                                            ' - Choose any letter to open in the answer box',
                                         style: TextStyle(
                                           fontSize:
                                               SizeConfig.blockSizeVertical *
@@ -383,7 +383,7 @@ class _HowToPlayScreenState extends State<HowToPlayScreen> {
                               ),
                               Expanded(
                                 child: Text(
-                                  'Removes all annoying characters',
+                                  'Removes all extra letters',
                                   style: TextStyle(
                                     fontSize:
                                         SizeConfig.blockSizeVertical * 2.2,

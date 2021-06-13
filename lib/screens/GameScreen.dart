@@ -20,7 +20,9 @@ import 'package:logo_quiz/widgets/HintDialog.dart';
 import 'package:logo_quiz/widgets/CoinError.dart';
 import 'package:logo_quiz/widgets/GameAlertDialog.dart';
 import 'package:logo_quiz/widgets/RemoveError.dart';
+import '../widgets/GameAlertDialog.dart';
 import 'PurchaseScreen.dart';
+import 'package:logo_quiz/widgets/RemoveDialog.dart';
 
 class GameScreen extends StatefulWidget {
   // id de truyen vao anh
@@ -38,6 +40,7 @@ class GameScreen extends StatefulWidget {
 }
 
 class _GameScreenState extends State<GameScreen> {
+  List<String> listRandom = [];
   // chi dung de chuan hoa String
   List<String> listAnswer = [];
   // list o duoi, luon luon dung
@@ -70,13 +73,20 @@ class _GameScreenState extends State<GameScreen> {
   static const chars = "abcdefghijklmnopqrstuvwxyz";
   int temp;
   int choice = 0;
+  int removeChoice = 0;
   bool shouldPop = false;
   int exit = 0;
+  int leftBack = 0;
+  int rightBack = 0;
+  int loadingQuestion = 0;
   bool loadingAnswer = true;
-  bool loadingQuestion = true;
   bool isWin = false;
   bool isHintMode = false;
   bool isUsingHint = false;
+  bool isUsingRemove = false;
+
+  bool isRandom = false;
+
   Function equal = const ListEquality().equals;
 
   String generateRandomString(int len) {
@@ -105,30 +115,40 @@ class _GameScreenState extends State<GameScreen> {
             return CoinError();
           });
     } else {
-      list.clear();
-      listAnswer.clear();
-      listInput.clear();
-      listVisible.clear();
-      for (var element in answer.split("")) {
-        list.add(element.toUpperCase());
-        listAnswer.add(element.toUpperCase());
-        listInput.add("_");
-        listVisible.add(true);
+      if (!isUsingRemove) {
+        isUsingRemove = true;
+        list.clear();
+        listAnswer.clear();
+        listInput.clear();
+        listVisible.clear();
+        for (var element in answer.split("")) {
+          list.add(element.toUpperCase());
+          listAnswer.add(element.toUpperCase());
+          listInput.add("_");
+          listVisible.add(true);
+        }
+        list.shuffle();
+        Provider.of<LogoProvider>(context, listen: false).minusRemoveLetter();
       }
-      shuffleString(list);
-      Provider.of<LogoProvider>(context, listen: false).minusRemoveLetter();
     }
   }
 
-  void randomString(List<String> list, int len) {
-    var temp = generateRandomString(len);
-    for (var element in temp.split("")) {
-      list.add(element.toUpperCase());
-    }
-  }
+  void randomString(int len) {
+    if (!isRandom) {
+      Provider.of<LogoProvider>(context, listen: false).refreshListRandom();
+      var temp = generateRandomString(len);
+      print(temp.split(""));
+      for (var element in temp.split("")) {
+        Provider.of<LogoProvider>(context, listen: false)
+            .listRandom
+            .add(element.toUpperCase());
+      }
 
-  void shuffleString(List<String> list) {
-    list.shuffle();
+      listQuestion
+          .addAll(Provider.of<LogoProvider>(context, listen: false).listRandom);
+      listQuestion.shuffle();
+      isRandom = true;
+    }
   }
 
   fetchLogoData(int themeId) async {
@@ -139,23 +159,6 @@ class _GameScreenState extends State<GameScreen> {
   void fetchCateGory(int id) async {
     category = await DatabaseProvider.dbProvider.getCategory(id);
   }
-
-  // void showExitDialog(BuildContext context) async {
-  //   exit = await showDialog(
-  //       context: context,
-  //       builder: (context) {
-  //         return GameAlertDialog();
-  //       });
-  //
-  //   if (exit == 1) {
-  //     Navigator.pushReplacement(
-  //         context,
-  //         MaterialPageRoute(
-  //             builder: (context) => LogoGridScreen(
-  //                   themeId: widget.themeId,
-  //                 )));
-  //   }
-  // }
 
   Future<bool> willPop(BuildContext context) async {
     exit = await showDialog(
@@ -174,6 +177,32 @@ class _GameScreenState extends State<GameScreen> {
                   )));
     }
     return shouldPop;
+  }
+
+  Future<int> showLeftBackDialog(BuildContext context) async {
+    leftBack = await showDialog(
+        context: context,
+        builder: (context) {
+          return GameAlertDialog();
+        });
+    return leftBack;
+  }
+
+  void showRemoveDialog(BuildContext context) async {
+    removeChoice = await showDialog(
+        context: context,
+        builder: (context) {
+          return RemoveDialog();
+        });
+
+    print(removeChoice);
+
+    if (removeChoice == 1) {
+      removeAllRandomLetter(widget.logo.answer, listQuestion);
+      setState(() {});
+    }
+
+    if (removeChoice == 2) {}
   }
 
   void showHintDialog(BuildContext context) async {
@@ -199,11 +228,19 @@ class _GameScreenState extends State<GameScreen> {
   }
 
   void hintLetter() {
-    isHintMode = true;
-    isUsingHint = true;
-    print(isHintMode);
-
-    setState(() {});
+    if (Provider.of<LogoProvider>(context, listen: false).totalCoin < 100) {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return CoinError();
+          });
+    } else {
+      isHintMode = true;
+      isUsingHint = true;
+      print(isHintMode);
+      Provider.of<LogoProvider>(context, listen: false).minusShowLetter();
+      setState(() {});
+    }
   }
 
   void randomLetter(Logo logo) {
@@ -221,11 +258,31 @@ class _GameScreenState extends State<GameScreen> {
             listTemp.add(i);
           }
         }
+        print("listTemp: $listTemp");
         Random random = Random();
         int rand = random.nextInt(listTemp.length);
+        print("rand: $rand");
         listAnswer[listTemp[rand]] = tempListAnswer[listTemp[rand]];
+        print(
+            "tempListAnswer[listTemp[rand]]: ${tempListAnswer[listTemp[rand]]}");
         listInput[listTemp[rand]] = tempListAnswer[listTemp[rand]];
         hintedListAnswer[listTemp[rand]] = true;
+        // for (int i = 0; i < listVisible.length; i++) {
+        //   if (listVisible[i] &&
+        //       i == listQuestion.indexOf(tempListAnswer[listTemp[rand]])) {
+        //     listVisible[i] = false;
+        //     break;
+        //   }
+        // }
+
+        for (int i = 0; i < listVisible.length; i++) {
+          if (listVisible[i] &&
+              listQuestion[i] == tempListAnswer[listTemp[rand]]) {
+            listVisible[i] = false;
+            break;
+          }
+        }
+        print("listVisible[listTemp[rand]]: ${listVisible[listTemp[rand]]}");
         Provider.of<LogoProvider>(context, listen: false).minusRandomLetter();
         isUsingHint = true;
         setState(() {
@@ -272,7 +329,7 @@ class _GameScreenState extends State<GameScreen> {
   }
 
   void showAnswer(Logo logo) {
-    if (Provider.of<LogoProvider>(context, listen: false).totalCoin < 200) {
+    if (Provider.of<LogoProvider>(context, listen: false).totalCoin < 400) {
       showDialog(
           context: context,
           builder: (context) {
@@ -283,6 +340,11 @@ class _GameScreenState extends State<GameScreen> {
         listAnswer[i] = tempListAnswer[i];
         listInput[i] = tempListAnswer[i];
       }
+
+      for (int i = 0; i < listVisible.length; i++) {
+        listVisible[i] = false;
+      }
+
       isWin = true;
       if (Provider.of<LogoProvider>(context, listen: false).soundCheck == 1) {
         Audio().playCorrect();
@@ -332,6 +394,12 @@ class _GameScreenState extends State<GameScreen> {
             colorHexText: 0xFFffffff,
             character: listInput[i],
           ),
+        );
+      } else if (isHintMode) {
+        return QuestionCell(
+          colorHexBackground: 0xFFd5bb4d,
+          colorHexText: 0xFFffffff,
+          character: listInput[i],
         );
       } else {
         return QuestionCell(
@@ -453,18 +521,18 @@ class _GameScreenState extends State<GameScreen> {
                                   fontSize: SizeConfig.blockSizeVertical * 3,
                                 ),
                               ),
-                        IconButton(
-                            enableFeedback: logoData.isSound,
-                            icon: SvgPicture.asset(
-                              'assets/icons/addMoney.svg',
-                              width: SizeConfig.blockSizeVertical * 4,
-                            ),
-                            onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => PurchaseScreen()));
-                            }),
+                        // IconButton(
+                        //     enableFeedback: logoData.isSound,
+                        //     icon: SvgPicture.asset(
+                        //       'assets/icons/addMoney.svg',
+                        //       width: SizeConfig.blockSizeVertical * 4,
+                        //     ),
+                        //     onPressed: () {
+                        //       Navigator.push(
+                        //           context,
+                        //           MaterialPageRoute(
+                        //               builder: (context) => PurchaseScreen()));
+                        //     }),
                       ],
                     ),
                   ),
@@ -494,35 +562,39 @@ class _GameScreenState extends State<GameScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  int tmp;
-                                  Logo logoTemp = Logo();
-                                  bool isOK = false;
-                                  // print(widget.sequence);
-                                  for (tmp = widget.sequence - 1;
-                                      tmp > 0;
-                                      tmp--) {
-                                    if (logoListEachTheme[tmp - 1].isWin == 0) {
-                                      logoTemp = logoListEachTheme[tmp - 1];
-                                      temp = logoListEachTheme[tmp - 1].id;
-                                      isOK = true;
-                                      break;
+                              onTap: () async {
+                                int foo = await showLeftBackDialog(context);
+                                if (foo == 1) {
+                                  setState(() {
+                                    int tmp;
+                                    Logo logoTemp = Logo();
+                                    bool isOK = false;
+                                    // print(widget.sequence);
+                                    for (tmp = widget.sequence - 1;
+                                        tmp > 0;
+                                        tmp--) {
+                                      if (logoListEachTheme[tmp - 1].isWin ==
+                                          0) {
+                                        logoTemp = logoListEachTheme[tmp - 1];
+                                        temp = logoListEachTheme[tmp - 1].id;
+                                        isOK = true;
+                                        break;
+                                      }
                                     }
-                                  }
-                                  if (isOK) {
-                                    Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => GameScreen(
-                                                  logo: logoTemp,
-                                                  id: temp,
-                                                  themeId: widget.themeId,
-                                                  sequence: tmp,
-                                                  listLogo: widget.listLogo,
-                                                )));
-                                  }
-                                });
+                                    if (isOK) {
+                                      Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => GameScreen(
+                                                    logo: logoTemp,
+                                                    id: temp,
+                                                    themeId: widget.themeId,
+                                                    sequence: tmp,
+                                                    listLogo: widget.listLogo,
+                                                  )));
+                                    }
+                                  });
+                                }
                               },
                               child: Icon(
                                 Icons.keyboard_arrow_left_outlined,
@@ -566,35 +638,39 @@ class _GameScreenState extends State<GameScreen> {
                               },
                             ),
                             GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  int tmp;
-                                  Logo logoTemp = Logo();
-                                  bool isOK = false;
-                                  // print(widget.sequence);
-                                  for (tmp = widget.sequence + 1;
-                                      tmp <= logoListEachTheme.length;
-                                      tmp++) {
-                                    if (logoListEachTheme[tmp - 1].isWin == 0) {
-                                      logoTemp = logoListEachTheme[tmp - 1];
-                                      temp = logoListEachTheme[tmp - 1].id;
-                                      isOK = true;
-                                      break;
+                              onTap: () async {
+                                int foo = await showLeftBackDialog(context);
+                                if (foo == 1) {
+                                  setState(() {
+                                    int tmp;
+                                    Logo logoTemp = Logo();
+                                    bool isOK = false;
+                                    // print(widget.sequence);
+                                    for (tmp = widget.sequence + 1;
+                                        tmp <= logoListEachTheme.length;
+                                        tmp++) {
+                                      if (logoListEachTheme[tmp - 1].isWin ==
+                                          0) {
+                                        logoTemp = logoListEachTheme[tmp - 1];
+                                        temp = logoListEachTheme[tmp - 1].id;
+                                        isOK = true;
+                                        break;
+                                      }
                                     }
-                                  }
-                                  if (isOK) {
-                                    Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => GameScreen(
-                                                  logo: logoTemp,
-                                                  id: temp,
-                                                  themeId: widget.themeId,
-                                                  sequence: tmp,
-                                                  listLogo: widget.listLogo,
-                                                )));
-                                  }
-                                });
+                                    if (isOK) {
+                                      Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => GameScreen(
+                                                    logo: logoTemp,
+                                                    id: temp,
+                                                    themeId: widget.themeId,
+                                                    sequence: tmp,
+                                                    listLogo: widget.listLogo,
+                                                  )));
+                                    }
+                                  });
+                                }
                               },
                               child: Icon(
                                 Icons.keyboard_arrow_right_outlined,
@@ -608,60 +684,68 @@ class _GameScreenState extends State<GameScreen> {
                       SizedBox(
                         height: SizeConfig.blockSizeVertical * 2,
                       ),
-                      Container(
-                        height: SizeConfig.blockSizeVertical * 6.5,
-                        width: SizeConfig.screenWidth,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                showHintDialog(context);
-                              },
-                              child: Container(
-                                height: SizeConfig.blockSizeVertical * 13,
-                                width: SizeConfig.blockSizeHorizontal * 12,
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  color: Color(0xFF1A1742),
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(15)),
-                                ),
-                                child: ClipRRect(
-                                  child: SvgPicture.asset(
-                                    "assets/icons/hint.svg",
-                                    width: SizeConfig.blockSizeVertical * 4.5,
+                      AbsorbPointer(
+                        absorbing: isHintMode,
+                        child: Container(
+                          height: SizeConfig.blockSizeVertical * 6.5,
+                          width: SizeConfig.screenWidth,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  showHintDialog(context);
+                                },
+                                child: Container(
+                                  height: SizeConfig.blockSizeVertical * 13,
+                                  width: SizeConfig.blockSizeHorizontal * 12,
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                    color: Color(0xFF1A1742),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(15)),
+                                  ),
+                                  child: ClipRRect(
+                                    child: SvgPicture.asset(
+                                      "assets/icons/hint.svg",
+                                      width: SizeConfig.blockSizeVertical * 4.5,
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                            SizedBox(
-                              width: SizeConfig.blockSizeHorizontal * 10,
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                removeAllRandomLetter(
-                                    widget.logo.answer, listQuestion);
-                                setState(() {});
-                              },
-                              child: Container(
-                                height: SizeConfig.blockSizeVertical * 15,
-                                width: SizeConfig.blockSizeHorizontal * 12,
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  color: Color(0xFF1A1742),
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(15)),
-                                ),
-                                child: ClipRRect(
-                                  child: SvgPicture.asset(
-                                    "assets/icons/trash.svg",
-                                    width: SizeConfig.blockSizeVertical * 4.5,
+                              SizedBox(
+                                width: SizeConfig.blockSizeHorizontal * 10,
+                              ),
+                              Visibility(
+                                visible: !isUsingRemove,
+                                maintainSize: true,
+                                maintainAnimation: true,
+                                maintainState: true,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    showRemoveDialog(context);
+                                  },
+                                  child: Container(
+                                    height: SizeConfig.blockSizeVertical * 15,
+                                    width: SizeConfig.blockSizeHorizontal * 12,
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                      color: Color(0xFF1A1742),
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(15)),
+                                    ),
+                                    child: ClipRRect(
+                                      child: SvgPicture.asset(
+                                        "assets/icons/trash.svg",
+                                        width:
+                                            SizeConfig.blockSizeVertical * 4.5,
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                       FutureBuilder<Logo>(
@@ -696,39 +780,49 @@ class _GameScreenState extends State<GameScreen> {
                                           i++)
                                         GestureDetector(
                                             onTap: () {
+                                              print(
+                                                  "tempListAnswer: $tempListAnswer");
                                               if (isHintMode) {
-                                                setState(() {
-                                                  print("Oke $i");
-                                                  listInput[i] =
-                                                      tempListAnswer[i];
-                                                  listAnswer[i] =
-                                                      tempListAnswer[i];
-                                                  hintedListAnswer[i] = true;
-                                                  print("Oke ${listInput[i]}");
-                                                  print("Oke ${listAnswer[i]}");
-                                                  isHintMode = false;
-                                                  if (equal(
-                                                      listAnswer, listInput)) {
-                                                    isWin = true;
-                                                    if (Provider.of<LogoProvider>(
-                                                                context,
-                                                                listen: false)
-                                                            .soundCheck ==
-                                                        1) {
-                                                      Audio().playCorrect();
-                                                    }
-                                                    logoData.getRewards();
-
-                                                    logoData
-                                                        .updateWinningStatus(
-                                                            logo,
-                                                            category,
-                                                            logo.id,
-                                                            logo.catId);
-
-                                                    waitTimeForResult();
+                                                print("Oke $i");
+                                                listInput[i] =
+                                                    tempListAnswer[i];
+                                                listAnswer[i] =
+                                                    tempListAnswer[i];
+                                                hintedListAnswer[i] = true;
+                                                String temp = tempListAnswer[i];
+                                                for (int i = 0;
+                                                    i < listVisible.length;
+                                                    i++) {
+                                                  if (listVisible[i] &&
+                                                      listQuestion[i] == temp) {
+                                                    listVisible[i] = false;
+                                                    break;
                                                   }
-                                                });
+                                                }
+                                                print("Oke ${listInput[i]}");
+                                                print("Oke ${listAnswer[i]}");
+                                                isHintMode = false;
+                                                setState(() {});
+                                                if (equal(
+                                                    listAnswer, listInput)) {
+                                                  isWin = true;
+                                                  if (Provider.of<LogoProvider>(
+                                                              context,
+                                                              listen: false)
+                                                          .soundCheck ==
+                                                      1) {
+                                                    Audio().playCorrect();
+                                                  }
+                                                  logoData.getRewards();
+
+                                                  logoData.updateWinningStatus(
+                                                      logo,
+                                                      category,
+                                                      logo.id,
+                                                      logo.catId);
+
+                                                  waitTimeForResult();
+                                                }
                                               } else {
                                                 setState(() {
                                                   // print('listInput: ${listInput[i]}');
@@ -833,12 +927,12 @@ class _GameScreenState extends State<GameScreen> {
                                 AsyncSnapshot<Logo> snapshot) {
                               Logo logo = snapshot.data;
                               if (snapshot.hasData) {
-                                if (loadingQuestion) {
+                                if (loadingQuestion == 0) {
+                                  loadingQuestion = 1;
+                                  print("random");
                                   splitString(logo.answer, listQuestion);
                                   temp = this.listQuestion.length;
-                                  randomString(listQuestion, 12 - temp);
-                                  listQuestion.shuffle();
-                                  loadingQuestion = false;
+                                  randomString(12 - temp);
                                 }
                                 // print('$listQuestion and ${listQuestion.length}');
                                 // print('$listVisible and ${listVisible.length}');

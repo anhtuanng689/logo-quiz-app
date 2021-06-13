@@ -2,7 +2,7 @@ import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:logo_quiz/models/Logo.dart';
 import 'package:logo_quiz/screens/GameScreen.dart';
-import 'package:logo_quiz/screens/GameDoneSetting.dart';
+import 'package:logo_quiz/screens/GameDoneScreen.dart';
 import 'package:logo_quiz/utils/SizeConfig.dart';
 
 class LogoCell extends StatelessWidget {
@@ -36,7 +36,7 @@ class LogoCell extends StatelessWidget {
               ? Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => GameDoneSetting(
+                      builder: (context) => GameDoneScreen(
                             id: this.id,
                             answer: this.answer,
                             themeId: this.themeId,

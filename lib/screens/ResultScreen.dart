@@ -101,18 +101,18 @@ class _ResultScreenState extends State<ResultScreen> {
                           fontSize: SizeConfig.blockSizeVertical * 3,
                         ),
                       ),
-                      IconButton(
-                          enableFeedback: logoData.isSound,
-                          icon: SvgPicture.asset(
-                            'assets/icons/addMoney.svg',
-                            width: SizeConfig.blockSizeVertical * 4,
-                          ),
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => PurchaseScreen()));
-                          }),
+                      // IconButton(
+                      //     enableFeedback: logoData.isSound,
+                      //     icon: SvgPicture.asset(
+                      //       'assets/icons/addMoney.svg',
+                      //       width: SizeConfig.blockSizeVertical * 4,
+                      //     ),
+                      //     onPressed: () {
+                      //       Navigator.push(
+                      //           context,
+                      //           MaterialPageRoute(
+                      //               builder: (context) => PurchaseScreen()));
+                      //     }),
                     ],
                   ),
                 ),
@@ -184,7 +184,7 @@ class _ResultScreenState extends State<ResultScreen> {
                                     //     BorderRadius.all(Radius.circular(30)),
                                     child: Image.asset(
                                       "assets/drawable/ori_${logo.img}.webp",
-                                      scale: 0.875,
+                                      scale: 0.9,
                                     ),
                                   ),
                                 ),

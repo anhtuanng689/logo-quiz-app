@@ -46,7 +46,7 @@ class _HintDialogState extends State<HintDialog> {
                 ElevatedButton(
                   onPressed: () {
                     setState(() {
-                      choice = 1;
+                      choice = 2;
                       Navigator.pop(context, choice);
                     });
                   },
@@ -58,14 +58,14 @@ class _HintDialogState extends State<HintDialog> {
                       children: [
                         Spacer(),
                         SvgPicture.asset(
-                          'assets/icons/idea.svg',
+                          'assets/icons/question.svg',
                           width: SizeConfig.blockSizeVertical * 5,
                         ),
                         SizedBox(
                           width: SizeConfig.blockSizeHorizontal * 3,
                         ),
                         Text(
-                          'Hint (Watch video)',
+                          'Random Letter (50)',
                           style: TextStyle(
                             color: Color(0xFFCBD5E1),
                             fontWeight: FontWeight.w600,
@@ -89,7 +89,7 @@ class _HintDialogState extends State<HintDialog> {
                 ElevatedButton(
                   onPressed: () {
                     setState(() {
-                      choice = 2;
+                      choice = 1;
                       Navigator.pop(context, choice);
                     });
                   },
@@ -101,14 +101,14 @@ class _HintDialogState extends State<HintDialog> {
                       children: [
                         Spacer(),
                         SvgPicture.asset(
-                          'assets/icons/question.svg',
+                          'assets/icons/idea.svg',
                           width: SizeConfig.blockSizeVertical * 5,
                         ),
                         SizedBox(
                           width: SizeConfig.blockSizeHorizontal * 3,
                         ),
                         Text(
-                          'Random Letter (50)',
+                          'Show Letter (100)',
                           style: TextStyle(
                             color: Color(0xFFCBD5E1),
                             fontWeight: FontWeight.w600,
