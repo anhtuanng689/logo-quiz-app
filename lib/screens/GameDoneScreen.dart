@@ -1,28 +1,30 @@
 import 'dart:ui';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:logo_quiz/db/DatabaseProvider.dart';
 import 'package:logo_quiz/models/Logo.dart';
 import 'package:logo_quiz/provider/LogoProvider.dart';
 import 'package:logo_quiz/utils/SizeConfig.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:logo_quiz/widgets/QuestionCell.dart';
 import 'package:provider/provider.dart';
-
-import 'PurchaseScreen.dart';
 
 class GameDoneScreen extends StatefulWidget {
   final int id;
   final int themeId;
   final String answer;
+
   const GameDoneScreen({Key key, this.id, this.themeId, this.answer})
       : super(key: key);
+
   @override
   _GameDoneScreenState createState() => _GameDoneScreenState();
 }
 
 class _GameDoneScreenState extends State<GameDoneScreen> {
   List<String> listAnswer = [];
+
   // Random _random = Random();
   //
   // List<String> listCompliment = [

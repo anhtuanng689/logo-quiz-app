@@ -1,8 +1,8 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:logo_quiz/models/Logo.dart';
-import 'package:logo_quiz/screens/GameScreen.dart';
 import 'package:logo_quiz/screens/GameDoneScreen.dart';
+import 'package:logo_quiz/screens/GameScreen.dart';
 import 'package:logo_quiz/utils/SizeConfig.dart';
 
 class LogoCell extends StatelessWidget {
@@ -14,6 +14,7 @@ class LogoCell extends StatelessWidget {
   final String answer;
   final Logo logo;
   final List<Logo> listLogo;
+
   const LogoCell(
       {Key key,
       @required this.imgURL,

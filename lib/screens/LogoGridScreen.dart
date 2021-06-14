@@ -1,26 +1,27 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:logo_quiz/db/DatabaseProvider.dart';
 import 'package:logo_quiz/models/Logo.dart';
 import 'package:logo_quiz/provider/LogoProvider.dart';
 import 'package:logo_quiz/utils/SizeConfig.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:logo_quiz/widgets/LogoCell.dart';
 import 'package:provider/provider.dart';
 
 import 'GameHome.dart';
-import 'PurchaseScreen.dart';
 
 class LogoGridScreen extends StatefulWidget {
   final int themeId;
 
   const LogoGridScreen({Key key, this.themeId}) : super(key: key);
+
   @override
   _LogoGridScreenState createState() => _LogoGridScreenState();
 }
 
 class _LogoGridScreenState extends State<LogoGridScreen> {
   bool isFilter = false;
+
   // List<Logo> listLogo = [];
 
   // fetchListLogo() async {

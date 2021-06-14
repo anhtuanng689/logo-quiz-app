@@ -1,14 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:logo_quiz/db/DatabaseProvider.dart';
 import 'package:logo_quiz/provider/LogoProvider.dart';
 import 'package:logo_quiz/utils/SizeConfig.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:logo_quiz/screens/PurchaseScreen.dart';
 import 'package:provider/provider.dart';
 
 class HowToPlayScreen extends StatefulWidget {
   const HowToPlayScreen({Key key}) : super(key: key);
+
   @override
   _HowToPlayScreenState createState() => _HowToPlayScreenState();
 }

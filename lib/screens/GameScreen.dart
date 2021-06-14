@@ -31,6 +31,7 @@ class GameScreen extends StatefulWidget {
   final int sequence;
   final Logo logo;
   final List<Logo> listLogo;
+
   const GameScreen(
       {Key key, this.id, this.themeId, this.sequence, this.logo, this.listLogo})
       : super(key: key);
@@ -41,12 +42,16 @@ class GameScreen extends StatefulWidget {
 
 class _GameScreenState extends State<GameScreen> {
   List<String> listRandom = [];
+
   // chi dung de chuan hoa String
   List<String> listAnswer = [];
+
   // list o duoi, luon luon dung
   List<String> listQuestion = [];
+
   // chi dung de chuan hoa String
   List<String> listInput = [];
+
   // list dung de an hien phan tu
   List<bool> listVisible = [
     true,
@@ -66,6 +71,7 @@ class _GameScreenState extends State<GameScreen> {
   List<String> tempListAnswer = [];
 
   List<bool> hintedListAnswer = [];
+  List<bool> checkDuplicateAnswer = [];
 
   Categories category = Categories();
   List<Logo> logoListEachTheme = [];
@@ -195,7 +201,7 @@ class _GameScreenState extends State<GameScreen> {
           return RemoveDialog();
         });
 
-    print(removeChoice);
+    // print(removeChoice);
 
     if (removeChoice == 1) {
       removeAllRandomLetter(widget.logo.answer, listQuestion);
@@ -212,7 +218,7 @@ class _GameScreenState extends State<GameScreen> {
           return HintDialog();
         });
 
-    print(choice);
+    // print(choice);
 
     if (choice == 1) {
       hintLetter();
@@ -237,7 +243,7 @@ class _GameScreenState extends State<GameScreen> {
     } else {
       isHintMode = true;
       isUsingHint = true;
-      print(isHintMode);
+      // print(isHintMode);
       Provider.of<LogoProvider>(context, listen: false).minusShowLetter();
       setState(() {});
     }
@@ -258,13 +264,13 @@ class _GameScreenState extends State<GameScreen> {
             listTemp.add(i);
           }
         }
-        print("listTemp: $listTemp");
+        // print("listTemp: $listTemp");
         Random random = Random();
         int rand = random.nextInt(listTemp.length);
-        print("rand: $rand");
+        // print("rand: $rand");
         listAnswer[listTemp[rand]] = tempListAnswer[listTemp[rand]];
-        print(
-            "tempListAnswer[listTemp[rand]]: ${tempListAnswer[listTemp[rand]]}");
+        // print(
+        //     "tempListAnswer[listTemp[rand]]: ${tempListAnswer[listTemp[rand]]}");
         listInput[listTemp[rand]] = tempListAnswer[listTemp[rand]];
         hintedListAnswer[listTemp[rand]] = true;
         // for (int i = 0; i < listVisible.length; i++) {
@@ -282,7 +288,7 @@ class _GameScreenState extends State<GameScreen> {
             break;
           }
         }
-        print("listVisible[listTemp[rand]]: ${listVisible[listTemp[rand]]}");
+        // print("listVisible[listTemp[rand]]: ${listVisible[listTemp[rand]]}");
         Provider.of<LogoProvider>(context, listen: false).minusRandomLetter();
         isUsingHint = true;
         setState(() {
@@ -373,6 +379,12 @@ class _GameScreenState extends State<GameScreen> {
           ),
         );
       } else {
+        if (isHintMode)
+          return QuestionCell(
+            colorHexBackground: 0xFFd5bb4d,
+            colorHexText: 0xFFffffff,
+            character: listInput[i],
+          );
         return QuestionCell(
           colorHexBackground: 0xFFf44336,
           colorHexText: 0xFF191919,
@@ -412,7 +424,7 @@ class _GameScreenState extends State<GameScreen> {
   }
 
   Future<void> waitTimeForResult() {
-    print('timing');
+    // print('timing');
     return Future.delayed(
       Duration(seconds: 4),
       () => Navigator.pushReplacement(
@@ -437,11 +449,11 @@ class _GameScreenState extends State<GameScreen> {
   @override
   Widget build(BuildContext context) {
     final logoData = Provider.of<LogoProvider>(context, listen: false);
-    print("_____________________");
-    print('id ${widget.id}');
-    print('sq ${widget.sequence}');
-    print('catid ${widget.themeId}');
-    print('answer ${widget.logo.answer}');
+    // print("_____________________");
+    // print('id ${widget.id}');
+    // print('sq ${widget.sequence}');
+    // print('catid ${widget.themeId}');
+    // print('answer ${widget.logo.answer}');
     return AbsorbPointer(
       absorbing: isWin,
       child: SafeArea(
@@ -764,6 +776,7 @@ class _GameScreenState extends State<GameScreen> {
                               for (int i = 0; i < logo.answer.length; i++) {
                                 listInput.add('_');
                                 hintedListAnswer.add(false);
+                                checkDuplicateAnswer.add(false);
                               }
                               loadingAnswer = false;
                             }
@@ -783,24 +796,111 @@ class _GameScreenState extends State<GameScreen> {
                                               print(
                                                   "tempListAnswer: $tempListAnswer");
                                               if (isHintMode) {
-                                                print("Oke $i");
-                                                listInput[i] =
-                                                    tempListAnswer[i];
-                                                listAnswer[i] =
-                                                    tempListAnswer[i];
-                                                hintedListAnswer[i] = true;
-                                                String temp = tempListAnswer[i];
-                                                for (int i = 0;
-                                                    i < listVisible.length;
-                                                    i++) {
-                                                  if (listVisible[i] &&
-                                                      listQuestion[i] == temp) {
-                                                    listVisible[i] = false;
-                                                    break;
+                                                if (listInput[i] ==
+                                                    listAnswer[i]) {
+                                                  listInput[i] =
+                                                      tempListAnswer[i];
+                                                  // listAnswer[i] =
+                                                  //     tempListAnswer[i];
+                                                  hintedListAnswer[i] = true;
+                                                } else {
+                                                  if (listInput[i] != "_") {
+                                                    print("if opt");
+                                                    for (int j = 0;
+                                                        j < listInput.length;
+                                                        j++) {
+                                                      if (j == i) continue;
+                                                      if (!checkDuplicateAnswer[
+                                                              j] &&
+                                                          !hintedListAnswer[
+                                                              j] &&
+                                                          listInput[j] ==
+                                                              listAnswer[i]) {
+                                                        print("if if if");
+                                                        // listAnswer[j] = "_";
+                                                        checkDuplicateAnswer[
+                                                            j] = true;
+                                                        listVisible[listQuestion
+                                                            .indexOf(listInput[
+                                                                i])] = true;
+                                                        // for (int k = 0;
+                                                        //     k <
+                                                        //         listVisible
+                                                        //             .length;
+                                                        //     k++) {
+                                                        //   listVisible[listQuestion
+                                                        //           .indexOf(
+                                                        //               listAnswer[
+                                                        //                   i])] =
+                                                        //       false;
+                                                        //   break;
+                                                        // }
+
+                                                        listInput[j] = "_";
+
+                                                        break;
+                                                      } else if (!hintedListAnswer[
+                                                              j] &&
+                                                          listInput[j] ==
+                                                              listAnswer[i]) {
+                                                        print("else if");
+                                                        print(listInput[j]);
+                                                        print(listInput[i]);
+                                                        listInput[j] =
+                                                            listInput[i];
+                                                        print(listInput[j]);
+                                                        print(listInput[i]);
+                                                        break;
+                                                      } else {
+                                                        print("else if opt");
+                                                        listVisible[listQuestion
+                                                            .indexOf(listInput[
+                                                                i])] = true;
+                                                        break;
+                                                      }
+                                                    }
+                                                  } else {
+                                                    print("else opt");
+                                                    for (int z = 0;
+                                                        z < listVisible.length;
+                                                        z++) {
+                                                      if (listAnswer[i] ==
+                                                              listQuestion[z] &&
+                                                          !listVisible[z]) {
+                                                        print(listAnswer);
+                                                        print(listQuestion);
+                                                        print(listVisible);
+                                                        listVisible[z] = false;
+                                                        print(listVisible);
+
+                                                        print("OK");
+                                                        break;
+                                                      }
+                                                    }
+                                                  }
+                                                  // print("Oke $i");
+                                                  listInput[i] =
+                                                      tempListAnswer[i];
+                                                  // listAnswer[i] =
+                                                  //     tempListAnswer[i];
+                                                  hintedListAnswer[i] = true;
+                                                  String temp =
+                                                      tempListAnswer[i];
+                                                  for (int i = 0;
+                                                      i < listVisible.length;
+                                                      i++) {
+                                                    if (listVisible[i] &&
+                                                        listQuestion[i] ==
+                                                            temp) {
+                                                      listVisible[i] = false;
+                                                      break;
+                                                    }
                                                   }
                                                 }
-                                                print("Oke ${listInput[i]}");
-                                                print("Oke ${listAnswer[i]}");
+                                                print(listVisible);
+
+                                                print("Oke $listInput");
+                                                print("Oke $listAnswer");
                                                 isHintMode = false;
                                                 setState(() {});
                                                 if (equal(
@@ -837,7 +937,7 @@ class _GameScreenState extends State<GameScreen> {
                                                   }
                                                   listInput[i] = '_';
 
-                                                  print(listInput);
+                                                  // print(listInput);
                                                 });
                                               }
                                             },
@@ -929,7 +1029,7 @@ class _GameScreenState extends State<GameScreen> {
                               if (snapshot.hasData) {
                                 if (loadingQuestion == 0) {
                                   loadingQuestion = 1;
-                                  print("random");
+                                  // print("random");
                                   splitString(logo.answer, listQuestion);
                                   temp = this.listQuestion.length;
                                   randomString(12 - temp);
@@ -948,7 +1048,7 @@ class _GameScreenState extends State<GameScreen> {
                                             i++)
                                           GestureDetector(
                                             onTap: () {
-                                              print("${category.count}");
+                                              // print("${category.count}");
                                               setState(() {
                                                 for (int j = 0;
                                                     j < listInput.length;
@@ -968,9 +1068,9 @@ class _GameScreenState extends State<GameScreen> {
                                                     Audio().playCorrect();
                                                   }
                                                   logoData.getRewards();
-                                                  print(logo);
-                                                  print(category);
-                                                  print(logo.id);
+                                                  // print(logo);
+                                                  // print(category);
+                                                  // print(logo.id);
 
                                                   logoData.updateWinningStatus(
                                                       logo,

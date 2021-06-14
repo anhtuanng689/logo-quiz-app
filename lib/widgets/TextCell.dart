@@ -3,6 +3,7 @@ import 'package:logo_quiz/utils/SizeConfig.dart';
 
 class TextCell extends StatelessWidget {
   final String character;
+
   const TextCell({
     Key key,
     this.character,

@@ -1,12 +1,13 @@
 import 'dart:math';
-import 'package:logo_quiz/utils/Audio.dart';
+
 import 'package:flutter/material.dart';
 import 'package:logo_quiz/db/DatabaseProvider.dart';
 import 'package:logo_quiz/models/Categories.dart';
 import 'package:logo_quiz/provider/LogoProvider.dart';
+import 'package:logo_quiz/screens/LogoGridScreen.dart';
+import 'package:logo_quiz/utils/Audio.dart';
 import 'package:logo_quiz/utils/SizeConfig.dart';
 import 'package:percent_indicator/percent_indicator.dart';
-import 'package:logo_quiz/screens/LogoGridScreen.dart';
 import 'package:provider/provider.dart';
 
 class LogoTheme extends StatelessWidget {

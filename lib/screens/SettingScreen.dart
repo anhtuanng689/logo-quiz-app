@@ -1,17 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:logo_quiz/db/DatabaseProvider.dart';
+import 'package:logo_quiz/models/Setting.dart';
 import 'package:logo_quiz/provider/LogoProvider.dart';
 import 'package:logo_quiz/provider/Notification.dart';
 import 'package:logo_quiz/screens/HomeScreen.dart';
 import 'package:logo_quiz/utils/SizeConfig.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:xlive_switch/xlive_switch.dart';
-import 'package:logo_quiz/models/Setting.dart';
 
 class SettingScreen extends StatefulWidget {
   const SettingScreen({Key key}) : super(key: key);
+
   @override
   _SettingScreenState createState() => _SettingScreenState();
 }

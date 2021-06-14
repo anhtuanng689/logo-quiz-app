@@ -12,6 +12,7 @@ class HintDialog extends StatefulWidget {
 
 class _HintDialogState extends State<HintDialog> {
   int choice;
+
   @override
   Widget build(BuildContext context) {
     final logoData = Provider.of<LogoProvider>(context, listen: false);

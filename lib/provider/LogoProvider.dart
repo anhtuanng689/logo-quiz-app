@@ -2,9 +2,9 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:logo_quiz/db/DatabaseProvider.dart';
+import 'package:logo_quiz/models/Categories.dart';
 import 'package:logo_quiz/models/Logo.dart';
 import 'package:logo_quiz/models/Score.dart';
-import 'package:logo_quiz/models/Categories.dart';
 import 'package:logo_quiz/models/Setting.dart';
 
 class LogoProvider with ChangeNotifier {
@@ -30,6 +30,10 @@ class LogoProvider with ChangeNotifier {
     // notifyListeners();
   }
 
+  refresh() {
+    notifyListeners();
+  }
+
   fetchGameSetting() async {
     gameSetting = await DatabaseProvider.dbProvider.fetchSetting(1);
     print("load db done");
@@ -49,6 +53,7 @@ class LogoProvider with ChangeNotifier {
       isSound = false;
     }
     notificationCheck = gameSetting.notification;
+    notifyListeners();
   }
 
   // fetchLogoPerTheme(int numberTheme) async {

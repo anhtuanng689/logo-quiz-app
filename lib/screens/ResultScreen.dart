@@ -2,18 +2,16 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:logo_quiz/db/DatabaseProvider.dart';
 import 'package:logo_quiz/models/Logo.dart';
 import 'package:logo_quiz/provider/LogoProvider.dart';
+import 'package:logo_quiz/screens/GameScreen.dart';
 import 'package:logo_quiz/screens/LogoGridScreen.dart';
 import 'package:logo_quiz/utils/Audio.dart';
 import 'package:logo_quiz/utils/SizeConfig.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:logo_quiz/screens/GameScreen.dart';
 import 'package:logo_quiz/widgets/QuestionCell.dart';
 import 'package:provider/provider.dart';
-
-import 'PurchaseScreen.dart';
 
 class ResultScreen extends StatefulWidget {
   final int id;
@@ -21,6 +19,7 @@ class ResultScreen extends StatefulWidget {
   final List listAnswer;
   final int sequence;
   final List<Logo> listLogo;
+
   const ResultScreen(
       {Key key,
       this.id,
@@ -29,6 +28,7 @@ class ResultScreen extends StatefulWidget {
       this.sequence,
       this.listLogo})
       : super(key: key);
+
   @override
   _ResultScreenState createState() => _ResultScreenState();
 }

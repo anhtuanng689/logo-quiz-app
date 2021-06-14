@@ -1,7 +1,6 @@
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:animated_text_kit/animated_text_kit.dart';
-import 'package:logo_quiz/utils/SizeConfig.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -11,7 +10,6 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
-    SizeConfig().init(context);
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.grey,

@@ -1,21 +1,21 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:logo_quiz/db/DatabaseProvider.dart';
 import 'package:logo_quiz/provider/LogoProvider.dart';
-import 'package:logo_quiz/utils/Audio.dart';
-import 'package:logo_quiz/utils/SizeConfig.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:logo_quiz/screens/SettingScreen.dart';
-import 'package:logo_quiz/screens/PurchaseScreen.dart';
-import 'package:provider/provider.dart';
 import 'package:logo_quiz/screens/GameHome.dart';
 import 'package:logo_quiz/screens/HowToPlayScreen.dart';
+import 'package:logo_quiz/screens/SettingScreen.dart';
+import 'package:logo_quiz/utils/Audio.dart';
+import 'package:logo_quiz/utils/SizeConfig.dart';
+import 'package:provider/provider.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key key}) : super(key: key);
+
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -28,7 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {});
     print('fetching');
     await Provider.of<LogoProvider>(context, listen: false).fetchGameSetting();
-    await Provider.of<LogoProvider>(context, listen: false).fetchData();
+    Provider.of<LogoProvider>(context, listen: false).fetchData();
     print('done fetching');
     loading = false;
     setState(() {});

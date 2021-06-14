@@ -1,18 +1,18 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:logo_quiz/db/DatabaseProvider.dart';
 import 'package:logo_quiz/models/Logo.dart';
 import 'package:logo_quiz/provider/LogoProvider.dart';
 import 'package:logo_quiz/screens/HomeScreen.dart';
 import 'package:logo_quiz/utils/SizeConfig.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:logo_quiz/widgets/LogoTheme.dart';
-import 'package:logo_quiz/screens/PurchaseScreen.dart';
 import 'package:provider/provider.dart';
 
 class GameHome extends StatefulWidget {
   const GameHome({Key key}) : super(key: key);
+
   @override
   _GameHomeState createState() => _GameHomeState();
 }

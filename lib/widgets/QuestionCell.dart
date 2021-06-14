@@ -5,6 +5,7 @@ class QuestionCell extends StatelessWidget {
   final String character;
   final int colorHexBackground;
   final int colorHexText;
+
   const QuestionCell({
     Key key,
     this.character,

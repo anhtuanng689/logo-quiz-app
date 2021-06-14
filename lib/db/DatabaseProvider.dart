@@ -1,14 +1,16 @@
 import 'dart:io';
+
 import 'package:flutter/services.dart';
-import 'package:logo_quiz/models/Logo.dart';
-import 'package:sqflite/sqflite.dart';
-import 'package:path/path.dart';
-import 'package:logo_quiz/models/Score.dart';
 import 'package:logo_quiz/models/Categories.dart';
+import 'package:logo_quiz/models/Logo.dart';
+import 'package:logo_quiz/models/Score.dart';
 import 'package:logo_quiz/models/Setting.dart';
+import 'package:path/path.dart';
+import 'package:sqflite/sqflite.dart';
 
 class DatabaseProvider {
   DatabaseProvider._();
+
   static final DatabaseProvider dbProvider = DatabaseProvider._();
   static Database _database;
 
